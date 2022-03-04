@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="easymall.dao.ProductsDao">
+<select id="allcategories"  resultType="String">
+	select distinct(category) from products
+</select>
+
+<select id="prodlist" resultType="easymall.po.Products" parameterType="map">
+	select * from products where (price between #{minPrice} and #{maxPrice})
+	<if test="name!=null and name!=''">
+		and name like concat('%',#{name},'%')
+	</if>
+	<if test="category!=null and category!=''">
+		and category=#{category}
+	</if>
+</select>
+
+<select id="oneProduct" parameterType="String" resultType="easymall.po.Products">
+	select * from products where id=#{pid}
+</select>
+
+<select id="prodclass" parameterType="String" resultType="easymall.po.Products">
+	select * from products where category=#{category}
+</select>
+
+<insert id="save" parameterType="easymall.po.Products">
+	insert into products(id,name,price,category,pnum,imgurl,description)
+		values(#{id},#{name},#{price},#{category},#{pnum},#{imgurl},#{description});
+</insert>
+
+<select id="findByImgurl" parameterType="String" resultType="easymall.po.Products">
+	select * from products where imgurl=#{imgurl}
+</select>
+
+<delete id="delprod" parameterType="String">
+	delete from products where id=#{id}
+</delete>
+	<update id="updateSalas" parameterType="easymall.po.Salas">
+		update products set soldnum = soldnum+#{num},pnum = pnum-#{num} where id=#{pid}
+	</update>
+	<select id="findSalasTop" resultType="easymall.po.Products">
+		select * from products order by soldnum DESC limit 0,4
+	</select>
+	<update id="updateProduct" parameterType="easymall.po.Products">
+		update products set name=#{name},price=#{price},category=#{category},pnum=#{pnum},imgurl=#{imgurl},description=#{description} where id=#{id}
+	</update>
+</mapper>

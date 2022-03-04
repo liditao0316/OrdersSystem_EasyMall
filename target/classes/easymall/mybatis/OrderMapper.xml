@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="easymall.dao.OrderDao">
+<insert id="addOrder" parameterType="easymall.po.Orders">
+	insert into orders(id,money,receiverinfo,paystate,ordertime,user_id,getstate,sendstate)
+		values(#{id},#{money},#{receiverinfo},#{paystate},#{ordertime},#{user_id},#{getstate},#{sendstate})
+</insert>
+
+<select id="findOrderByUserId" parameterType="Integer" resultType="easymall.po.Orders">
+	select * from orders where user_id=#{user_id};
+</select>
+
+<delete id="delorder" parameterType="String">
+	delete from orders where id=#{id}
+</delete>
+
+<update id="payorder" parameterType="String">
+	update orders set paystate=1 where id=#{id}
+</update>
+	<update id="setstate" parameterType="String">
+		update orders set getstate=1 where id=#{id}
+	</update>
+	<update id="sendstate" parameterType="String">
+		update orders set sendstate=1 where id=#{id}
+	</update>
+	<select id="selectAll" resultType="easymall.po.Orders">
+		select * from orders,user where sendstate = 0 and paystate = 1 and orders.user_id = user.id
+	</select>
+	<select id="selectSend" resultType="easymall.po.Orders">
+		select * from orders,user where sendstate = 1 and orders.user_id = user.id
+	</select>
+</mapper>

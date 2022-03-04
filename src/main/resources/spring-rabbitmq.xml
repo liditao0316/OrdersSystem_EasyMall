@@ -1,0 +1,18 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+           https://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+           http://www.springframework.org/schema/beans
+           https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <rabbit:connection-factory id="connectionFactory" virtual-host="${rabbit.virtual-host}" username="${rabbit.username}"
+    password="${rabbit.password}" port="${rabbit.port}" host="${rabbit.host}"/>
+
+    <rabbit:template id="rabbitTemplate" connection-factory="connectionFactory" reply-timeout="10000"/>
+    <bean class="easymall.controller.TestServiceImpl" id="testService"/>
+    <rabbit:admin connection-factory="connectionFactory" />
+    <rabbit:listener-container connection-factory="connectionFactory" acknowledge="manual">
+        <rabbit:listener ref="testService" queue-names="order"/>
+    </rabbit:listener-container>
+</beans>

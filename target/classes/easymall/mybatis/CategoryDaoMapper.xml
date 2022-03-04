@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="easymall.dao.CategoryDao">
+	<select id="selectAll" resultType="easymall.pojo.Category">
+		select * from category
+	</select>
+	<select id="selectByName" resultType="easymall.pojo.Category">
+		select * from category where  name = #{name}
+	</select>
+	<update id="update" parameterType="easymall.pojo.Category">
+		update category set description = #{description}  where name=#{name}
+	</update>
+	<delete id="delete" parameterType="String">
+		delete from category where name = #{name}
+	</delete>
+	<insert id="insert" parameterType="easymall.pojo.Category">
+		insert into category(name,description) values(#{name},#{description})
+	</insert>
+</mapper>
